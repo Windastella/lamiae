@@ -19,21 +19,13 @@ CLIENT_LIBS= -L/usr/X11R6/lib `sdl2-config --libs` -lSDL2_image -lSDL2_mixer -lz
 
 
 PLATFORM= $(shell uname -s)
-PLATFORM_PATH="bin_unk"
+PLATFORM_PATH="bin/unk"
 PLATFORM_ARCH= $(shell uname -m)
 PLATFORM_TYPE=windows
 
 ifeq ($(PLATFORM),Linux)
 	CLIENT_LIBS+= -lrt
-	ifneq (,$(OVR))
-		CLIENT_INCLUDES+= -ILibOVR/Include -DHAS_OVR=1
-		ifneq (,$(findstring 64,$(PLATFORM_ARCH)))
-			CLIENT_LIBS+= -LLibOVR/Lib/Linux/Release/x86_64 -lovr -ludev -lXinerama
-		else
-			CLIENT_LIBS+= -LLibOVR/Lib/Linux/Release/i386 -lovr -ludev -lXinerama
-		endif
-	endif
-	PLATFORM_PATH=bin_unix
+	PLATFORM_PATH=bin/unix
 	PLATFORM_TYPE=unix
 else
 	ifneq (,$(findstring GNU,$(PLATFORM)))
@@ -43,12 +35,12 @@ endif
 
 ifeq ($(PLATFORM),SunOS)
 	CLIENT_LIBS+= -lsocket -lnsl -lX11
-	PLATFORM_PATH=bin_sun
+	PLATFORM_PATH=bin/sun
 	PLATFORM_TYPE=unix
 endif
 
 ifeq ($(PLATFORM),FreeBSD)
-	PLATFORM_PATH=bin_bsd
+	PLATFORM_PATH=bin/bsd
 	PLATFORM_TYPE=unix
 endif
 
@@ -108,7 +100,6 @@ CLIENT_OBJS= \
 	engine/octa.o \
 	engine/octaedit.o \
 	engine/octarender.o \
-	engine/ovr.o \
 	engine/pvs.o \
 	engine/physics.o \
 	engine/rendergl.o \
@@ -334,10 +325,6 @@ engine/octarender.o: shared/glexts.h shared/glemu.h shared/iengine.h
 engine/octarender.o: shared/igame.h engine/world.h engine/octa.h
 engine/octarender.o: engine/light.h engine/bih.h engine/texture.h
 engine/octarender.o: engine/model.h
-engine/ovr.o: engine/engine.h shared/cube.h shared/tools.h shared/geom.h
-engine/ovr.o: shared/ents.h shared/command.h shared/glexts.h shared/glemu.h
-engine/ovr.o: shared/iengine.h shared/igame.h engine/world.h engine/octa.h
-engine/ovr.o: engine/light.h engine/bih.h engine/texture.h engine/model.h
 engine/pvs.o: engine/engine.h shared/cube.h shared/tools.h shared/geom.h
 engine/pvs.o: shared/ents.h shared/command.h shared/glexts.h shared/glemu.h
 engine/pvs.o: shared/iengine.h shared/igame.h engine/world.h engine/octa.h
